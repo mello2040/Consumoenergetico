@@ -1,0 +1,13 @@
+CREATE SEQUENCE SEQ_CONSUMO
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE;
+
+CREATE TABLE TBL_CONSUMO
+(
+    ID           INTEGER DEFAULT SEQ_CONSUMO.NEXTVAL NOT NULL,
+    QTD_CONSUMO  NUMBER(10, 2)                       NOT NULL,
+    DATA_CONSUMO DATE                                NOT NULL,
+    UNIDADE      VARCHAR2(100)                       NOT NULL
+);
