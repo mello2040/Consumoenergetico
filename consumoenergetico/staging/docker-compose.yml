@@ -1,0 +1,12 @@
+services:
+  api:
+    image: ghcr.io/mello2040/consumoenergetico:staging
+    container_name: consumoenergetico-staging
+    restart: unless-stopped
+    ports:
+      - "8081:8080"           # host:container (staging na 8081)
+    environment:
+      SPRING_PROFILES_ACTIVE: "staging"
+      SPRING_DATASOURCE_URL: "jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL"
+      SPRING_DATASOURCE_USERNAME: "RM555027"
+      SPRING_DATASOURCE_PASSWORD: "200306"

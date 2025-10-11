@@ -1,0 +1,13 @@
+services:
+  api:
+    image: ghcr.io/mello2040/consumoenergetico:latest
+    container_name: consumoenergetico
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: "prod"
+      SPRING_DATASOURCE_URL: "jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL"
+      SPRING_DATASOURCE_USERNAME: "RM555027"
+      SPRING_DATASOURCE_PASSWORD: "200306"
+      JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=America/Sao_Paulo"
