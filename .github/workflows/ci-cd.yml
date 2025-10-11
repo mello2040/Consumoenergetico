@@ -1,106 +1,65 @@
-name: CI/CD - Maven + Docker (master + staging manual)
+name: CI/CD - Maven + Docker + 2 Ambientes
 
 on:
   push:
-    branches: [ "master" ]        # dispara quando fizer push na master (produção)
-  workflow_dispatch:               # permite rodar staging manualmente
-    inputs:
-      target:
-        description: "Ambiente para deploy (use staging para homologação)"
-        required: true
-        default: "staging"
+    branches: [ "master" ]   # ajuste para sua branch real
+  workflow_dispatch:
 
 permissions:
   contents: read
   packages: write
   id-token: write
 
+# 👉 todas as etapas 'run:' vão executar dentro de consumoenergetico/
+defaults:
+  run:
+    shell: bash
+    working-directory: consumoenergetico
+
 jobs:
   build_test:
-    name: Build & Test (Maven)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
           cache: maven
+
       - name: Build + Test
         run: mvn -B -ntp clean verify
 
-  # ----- Produção (push na master) -----
-  docker_push_prod:
+  docker_push:
     needs: build_test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
+
+      - name: Login GHCR
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 👉 use a subpasta como contexto e Dockerfile
       - name: Build & Push (prod)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./consumoenergetico
+          file: ./consumoenergetico/Dockerfile
           push: true
           tags: ghcr.io/mello2040/consumoenergetico:latest
 
-  deploy_production:
-    needs: docker_push_prod
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - uses: appleboy/ssh-action@v1.2.0
-        with:
-          host:     ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key:      ${{ secrets.SSH_KEY }}
-          script: |
-            docker login ghcr.io -u ${{ secrets.GHCR_USER }} -p ${{ secrets.GHCR_TOKEN }}
-            cd /srv/consumoenergetico/prod
-            docker compose pull
-            docker compose up -d
-            docker image prune -f
-
-  # ----- Staging (rodar manual via Actions → Run workflow) -----
-  docker_push_staging:
-    needs: build_test
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'staging'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build & Push (staging)
+      - name: Build & Push (staging manual)
+        if: github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./consumoenergetico
+          file: ./consumoenergetico/Dockerfile
           push: true
           tags: ghcr.io/mello2040/consumoenergetico:staging
-
-  deploy_staging:
-    needs: docker_push_staging
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'staging'
-    runs-on: ubuntu-latest
-    environment: staging
-    steps:
-      - uses: appleboy/ssh-action@v1.2.0
-        with:
-          host:     ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key:      ${{ secrets.SSH_KEY }}
-          script: |
-            docker login ghcr.io -u ${{ secrets.GHCR_USER }} -p ${{ secrets.GHCR_TOKEN }}
-            cd /srv/consumoenergetico/staging
-            docker compose pull
-            docker compose up -d
-            docker image prune -f
