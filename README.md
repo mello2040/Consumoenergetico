@@ -155,3 +155,146 @@ O container expõe a porta `8080` por padrão.
 Arquivo fonte principal: `consumoenergetico/src/main/java/br/com/fiap/consumoenergetico/ConsumoenergeticoApplication.java`
 
 Se quiser, eu atualizo o README com exemplos de resposta paginada (ex.: estrutura do Page) ou adiciono um exemplo de Postman/Insomnia.
+
+## Projeto - Cidades ESGInteligentes
+
+Este README também contém a documentação exigida para o projeto "Cidades ESGInteligentes" (mapear e documentar execução, containerização, pipeline e evidências).
+
+### Como executar localmente com Docker
+
+Passos mínimos para subir a aplicação localmente usando Docker:
+
+1. (Opcional) Build da imagem localmente:
+
+```powershell
+docker build -t consumoenergetico:local -f consumoenergetico/Dockerfile consumoenergetico
+```
+
+2. Subir usando o docker-compose do repositório (usa variáveis de ambiente para credenciais):
+
+```powershell
+docker compose -f consumoenergetico/docker-compose.yml up -d
+```
+
+3. Verificar logs e endpoints:
+
+```powershell
+docker compose -f consumoenergetico/docker-compose.yml logs -f api
+# Acessar: http://localhost:8080/api/consumo
+```
+
+Notas:
+- Configure as variáveis `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD` no ambiente ou no arquivo `docker-compose.yml` antes de subir em ambientes reais.
+- Para desenvolvimento local sem Oracle, use um profile com H2 (não incluso por padrão) ou aponte para um container Oracle compatível.
+
+### Pipeline CI/CD
+
+Se o repositório ainda não possui um pipeline, uma opção recomendada é usar GitHub Actions (ou GitLab CI / Azure Pipelines). O pipeline típico:
+
+- Gatilho: push em `main/master` e pull requests.
+- Etapas:
+  1. Checkout do código
+  2. Setup JDK 17
+  3. Cache de dependências Maven
+  4. Build e execução de testes unitários (`mvn test`)
+  5. Análise estática (opcional): SpotBugs, Checkstyle, SonarQube
+  6. Build do artefato (`mvn package -DskipTests`) e verificação mínima
+  7. Build da imagem Docker e push para registry (GHCR, Docker Hub, Azure Container Registry)
+  8. Deploy para staging (ex.: via Docker Compose, SSH, ou Kubernetes)
+  9. (Opcional) Promotion para produção após aprovação manual
+
+Exemplo mínimo de workflow GitHub Actions (colocar em `.github/workflows/ci.yml`):
+
+```yaml
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B -ntp clean package
+      - name: Build and push Docker image (optional)
+        if: github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+```
+
+Adapte a parte de push de imagem para o registry que você usa e adicione etapas de deploy conforme o ambiente (staging/prod).
+
+### Containerização
+
+Dockerfile (presente em `consumoenergetico/Dockerfile`):
+
+```dockerfile
+# Etapa 1: build (Maven já instalado)
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+WORKDIR /src
+
+COPY pom.xml .
+RUN mvn -B -ntp -q dependency:go-offline
+
+COPY src ./src
+RUN mvn -B -ntp clean package -DskipTests
+
+# Etapa 2: runtime (JRE)
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY --from=build /src/target/*.jar /app/app.jar
+EXPOSE 8080
+ENV JAVA_OPTS=""
+ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar /app/app.jar"]
+```
+
+Estratégias adotadas:
+- Multi-stage build para manter a imagem final enxuta; todas as dependências e o build ocorrem na imagem `maven`, o runtime usa apenas a JRE.
+- Cache das dependências com `dependency:go-offline` para acelerar builds em ambientes CI.
+- Exposição da porta 8080 e uso de `JAVA_OPTS` para ajustar memória em runtime.
+
+Arquivos `docker-compose.yml` (staging/prod) também estão no repositório e demonstram como parametrizar variáveis de ambiente para conexão com o banco.
+
+### Prints do funcionamento
+
+Inclua evidências em `docs/screenshots/` no repositório. Exemplos de imagens que valem a pena incluir:
+
+- Tela com container em execução (`docker ps` / logs)
+- Resposta de um GET em `/api/consumo` no browser/Postman
+- Deploy ou logs do pipeline indicando sucesso
+
+Exemplo de inserção no README (substitua os arquivos reais):
+
+```markdown
+![API rodando - docker ps](docs/screenshots/docker-ps.png)
+![GET /api/consumo - Postman](docs/screenshots/get-consumo-postman.png)
+```
+
+### Tecnologias utilizadas
+
+- Linguagem: Java 17
+- Framework: Spring Boot
+- Segurança: Spring Security
+- Persistência: Spring Data JPA, Hibernate
+- Migração de banco: Flyway
+- Banco de dados (destino): Oracle
+- Build: Maven (wrapper `mvnw` incluso)
+- Containerização: Docker, Docker Compose
+- Testes: JUnit, Mockito (adicionar conforme necessário)
+- Outros: Lombok, Jakarta Validation
+
+---
+
