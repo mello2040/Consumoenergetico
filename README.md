@@ -151,7 +151,3 @@ O container expõe a porta `8080` por padrão.
 - Externalizar configurações sensíveis com `spring.config.import=optional:configserver:` ou variáveis de ambiente.
 
 ---
-
-Arquivo fonte principal: `consumoenergetico/src/main/java/br/com/fiap/consumoenergetico/ConsumoenergeticoApplication.java`
-
-Se quiser, eu atualizo o README com exemplos de resposta paginada (ex.: estrutura do Page) ou adiciono um exemplo de Postman/Insomnia.
