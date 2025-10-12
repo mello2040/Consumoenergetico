@@ -1,12 +1,29 @@
+version: "3.9"
+
 services:
   api:
-    image: ghcr.io/mello2040/consumoenergetico:staging
-    container_name: consumoenergetico-staging
+    image: ghcr.io/mello2040/consumoenergetico:${TAG:-staging}
+    container_name: consumoenergetico-${TAG:-staging}
     restart: unless-stopped
     ports:
-      - "8081:8080"           # host:container (staging na 8081)
-    environment:
-      SPRING_PROFILES_ACTIVE: "staging"
-      SPRING_DATASOURCE_URL: "jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL"
-      SPRING_DATASOURCE_USERNAME: "RM555027"
-      SPRING_DATASOURCE_PASSWORD: "200306"
+      - "${SERVER_PORT:-8081}:8080"      # host:container
+    env_file:
+      - .env                              # carrega variáveis
+    volumes:
+      - app_logs:/app/logs
+      - app_tmp:/tmp
+    networks:
+      - app_net
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  app_logs:
+  app_tmp:
+
+networks:
+  app_net:
+    driver: bridge
