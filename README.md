@@ -204,70 +204,74 @@ curl http://localhost:8080/api/consumo
 
 ## 🛠 CI/CD (GitHub Actions)
 
-Fluxo sugerido:
+A pipeline foi configurada no GitHub Actions para automatizar as etapas de build, push da imagem Docker e deploy remoto.
 
-1. Build Maven
-2. Testes
-3. Análise estática (SpotBugs, SonarQube etc)
-4. Docker Build & Push
-5. Deploy (staging/prod)
+🧱 Etapas principais
 
-Exemplo de `.github/workflows/ci.yml`:
+Build & Test
 
-```yaml
-name: CI
+Compila o projeto com Maven (mvn clean package -DskipTests).
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+Garante que o JAR da aplicação é gerado corretamente.
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-          cache: maven
-      - name: Build with Maven
-        run: mvn -B -ntp clean package
-      - name: Build and push Docker image (optional)
-        if: github.ref == 'refs/heads/main'
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+Docker Build & Push
+
+Constrói a imagem Docker a partir do Dockerfile.
+
+Publica automaticamente no GitHub Container Registry (GHCR):
+
+ghcr.io/mello2040/consumoenergetico:latest
+
+
+Deploy Automático
+
+O deploy é realizado via SSH usando appleboy/ssh-action.
+
+No servidor, executa:
+
+docker compose pull
+docker compose up -d
+docker image prune -f
+
+Trecho simplificado do workflow:
+
+build_test:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v3
+    - name: Build with Maven
+      run: mvn clean package -DskipTests
+
+docker_push:
+  needs: build_test
+  runs-on: ubuntu-latest
+  steps:
+    - name: Build & Push Docker image
+      run: |
+        docker build -t ghcr.io/mello2040/consumoenergetico:latest .
+        echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
+        docker push ghcr.io/mello2040/consumoenergetico:latest
 ```
 
 ---
 
 ## 🐳 Containerização
 
-**Dockerfile** com multi-stage:
-
-```Dockerfile
-# Etapa 1: build
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-WORKDIR /src
-
-COPY pom.xml .
-RUN mvn -B -ntp -q dependency:go-offline
-
-COPY src ./src
-RUN mvn -B -ntp clean package -DskipTests
-
-# Etapa 2: runtime
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=build /src/target/*.jar /app/app.jar
+COPY target/*.jar app.jar
 EXPOSE 8080
-ENV JAVA_OPTS=""
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+💡 Estratégias adotadas
+
+Imagem base leve: eclipse-temurin:17-jre (menor e otimizada).
+
+Workdir isolado: /app para organização e segurança.
+
+Porta 8080 exposta: acesso direto à API REST.
+
+ENTRYPOINT: inicia automaticamente o JAR da aplicação.
 ```
 
 ---
