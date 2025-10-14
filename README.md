@@ -208,13 +208,15 @@ A pipeline foi configurada no GitHub Actions para automatizar as etapas de build
 
 🧱 Etapas principais
 
-Build & Test
+1 Build & Test
 
 Compila o projeto com Maven (mvn clean package -DskipTests).
 
 Garante que o JAR da aplicação é gerado corretamente.
 
-Docker Build & Push
+
+
+2 Docker Build & Push
 
 Constrói a imagem Docker a partir do Dockerfile.
 
@@ -223,34 +225,36 @@ Publica automaticamente no GitHub Container Registry (GHCR):
 ghcr.io/mello2040/consumoenergetico:latest
 
 
-Deploy Automático
+3 Deploy Automático
 
 O deploy é realizado via SSH usando appleboy/ssh-action.
 
 No servidor, executa:
 
 docker compose pull
+
 docker compose up -d
+
 docker image prune -f
 
 Trecho simplificado do workflow:
 
-build_test:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v3
-    - name: Build with Maven
-      run: mvn clean package -DskipTests
+*`build_test:`
+*  `runs-on: ubuntu-latest`
+*  `steps:`
+*    `- uses: actions/checkout@v3`
+*    `- name: Build with Maven`
+*      `run: mvn clean package -DskipTests`
 
-docker_push:
-  needs: build_test
-  runs-on: ubuntu-latest
-  steps:
-    - name: Build & Push Docker image
-      run: |
-        docker build -t ghcr.io/mello2040/consumoenergetico:latest .
-        echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
-        docker push ghcr.io/mello2040/consumoenergetico:latest
+*`*docker_push:`
+*  `needs: build_test`
+*  `runs-on: ubuntu-latest`
+*  `steps:`
+*    `- name: Build & Push Docker image`
+*      `run: |`
+*        `docker build -t ghcr.io/mello2040/consumoenergetico:latest .`
+*        `echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin`
+*        `docker push ghcr.io/mello2040/consumoenergetico:latest`
 ```
 
 ---
