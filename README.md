@@ -175,9 +175,13 @@ java -jar target/*.jar
 2.Criar o arquivo .env e configurar as variáveis
 
 3.Executar com Docker Compose
-docker compose up -d
+
 
 4.Verificar se está rodando
+
+Exemplo:
+```text
+docker compose up -d
 * docker compose ps
 curl http://localhost:8080/api/consumo
 
@@ -236,26 +240,25 @@ docker compose pull
 docker compose up -d
 
 docker image prune -f
+...
+* Trecho simplificado do workflow:
+```text
+build_test:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v3
+    - name: Build with Maven
+      run: mvn clean package -DskipTests
 
-*Trecho simplificado do workflow:
-
-*build_test:
-*  runs-on: ubuntu-latest
-*  steps:
-*    - uses: actions/checkout@v3
-*    - name: Build with Maven
-*      run: mvn clean package -DskipTests
-
-*docker_push:
-*  needs: build_test
-*  runs-on: ubuntu-latest
-*  steps:
-*    - name: Build & Push Docker image
-*      run: |
-*        docker build -t ghcr.io/mello2040/consumoenergetico:latest .
-*        echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
-*        docker push ghcr.io/mello2040/consumoenergetico:latest
-```
+docker_push:
+  needs: build_test
+  runs-on: ubuntu-latest
+  steps:
+    - name: Build & Push Docker image
+      run: |
+        docker build -t ghcr.io/mello2040/consumoenergetico:latest .
+        echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
+        docker push ghcr.io/mello2040/consumoenergetico:latest
 
 ---
 
