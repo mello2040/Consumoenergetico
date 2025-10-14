@@ -160,20 +160,26 @@ java -jar target/*.jar
 
 ### 🐳 Docker
 
-#### Build
+✅ Pré-requisitos
+- Docker e Docker Compose instalados.
+- Acesso à internet (para baixar a imagem do GHCR).
+- Banco de dados Oracle disponível (utilize as credenciais de teste fornecidas).
 
-```bash
-docker build -t consumoenergetico:local -f consumoenergetico/Dockerfile consumoenergetico
-```
+ 🧩 Passos para execução
 
-#### Run
+1. **Clonar o repositório**
+   ```bash
+   git clone https://github.com/mello2040/Consumoenergetico.git
+   cd Consumoenergetico/consumoenergetico
 
-```bash
-docker compose -f consumoenergetico/docker-compose.yml up -d
-```
+2.Criar o arquivo .env e configurar as variáveis
 
-* Exposição: `localhost:8080`
-* Use `SPRING_DATASOURCE_*` e `JAVA_OPTS` para configurar o ambiente
+3.Executar com Docker Compose
+docker compose up -d
+
+4.Verificar se está rodando
+docker compose ps
+curl http://localhost:8080/api/consumo
 
 ---
 
