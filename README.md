@@ -172,12 +172,11 @@ java -jar target/*.jar
    git clone https://github.com/mello2040/Consumoenergetico.git
    cd Consumoenergetico/consumoenergetico
 
-2.Criar o arquivo .env e configurar as variáveis
+2. **Criar o arquivo .env e configurar variáveis**
 
-3.Executar com Docker Compose
+3. **Executar com Docker Compose**
 
-
-4.Verificar se está rodando
+4. **Conferir se está rodando**
 
 Exemplo:
 ```text
@@ -212,7 +211,7 @@ curl http://localhost:8080/api/consumo
 
 🧱 Etapas principais
 
-1 Build & Test
+1. **Build e teste**
 
 * Compila o projeto com Maven (mvn clean package -DskipTests).
 
@@ -220,7 +219,7 @@ curl http://localhost:8080/api/consumo
 
 
 
-2 Docker Build & Push
+2. **Docker Build & Push**
 
 * Constrói a imagem Docker a partir do Dockerfile.
 
@@ -229,7 +228,7 @@ curl http://localhost:8080/api/consumo
 * ghcr.io/mello2040/consumoenergetico:latest
 
 
-3 Deploy Automático
+3. **Deploy Automático*
 
 * O deploy é realizado via SSH usando appleboy/ssh-action.
 
@@ -272,13 +271,13 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 💡 Estratégias adotadas
 
-Imagem base leve: eclipse-temurin:17-jre (menor e otimizada).
+* Imagem base leve: eclipse-temurin:17-jre (menor e otimizada).
 
-Workdir isolado: /app para organização e segurança.
+* Workdir isolado: /app para organização e segurança.
 
-Porta 8080 exposta: acesso direto à API REST.
+* Porta 8080 exposta: acesso direto à API REST.
 
-ENTRYPOINT: inicia automaticamente o JAR da aplicação.
+* ENTRYPOINT: inicia automaticamente o JAR da aplicação.
 ```
 
 ---
