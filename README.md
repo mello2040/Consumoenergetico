@@ -178,7 +178,7 @@ java -jar target/*.jar
 docker compose up -d
 
 4.Verificar se está rodando
-*docker compose ps
+* docker compose ps
 curl http://localhost:8080/api/consumo
 
 ---
@@ -204,38 +204,38 @@ curl http://localhost:8080/api/consumo
 
 ## 🛠 CI/CD (GitHub Actions)
 
-*A pipeline foi configurada no GitHub Actions para automatizar as etapas de build, push da imagem Docker e deploy remoto.
+* A pipeline foi configurada no GitHub Actions para automatizar as etapas de build, push da imagem Docker e deploy remoto.
 
 🧱 Etapas principais
 
 1 Build & Test
 
-*Compila o projeto com Maven (mvn clean package -DskipTests).
+* Compila o projeto com Maven (mvn clean package -DskipTests).
 
-*Garante que o JAR da aplicação é gerado corretamente.
+* Garante que o JAR da aplicação é gerado corretamente.
 
 
 
 2 Docker Build & Push
 
-*Constrói a imagem Docker a partir do Dockerfile.
+* Constrói a imagem Docker a partir do Dockerfile.
 
-*Publica automaticamente no GitHub Container Registry (GHCR):
+* Publica automaticamente no GitHub Container Registry (GHCR):
 
-*ghcr.io/mello2040/consumoenergetico:latest
+* ghcr.io/mello2040/consumoenergetico:latest
 
 
 3 Deploy Automático
 
-*O deploy é realizado via SSH usando appleboy/ssh-action.
+* O deploy é realizado via SSH usando appleboy/ssh-action.
 
-*No servidor, executa:
+* No servidor, executa:
 
-*`docker compose pull`
+docker compose pull
 
-*`docker compose up -d`
+docker compose up -d
 
-*`docker image prune -f`
+docker image prune -f
 
 *Trecho simplificado do workflow:
 
@@ -246,7 +246,7 @@ curl http://localhost:8080/api/consumo
 *    - name: Build with Maven
 *      run: mvn clean package -DskipTests
 
-**docker_push:
+*docker_push:
 *  needs: build_test
 *  runs-on: ubuntu-latest
 *  steps:
