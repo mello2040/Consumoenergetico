@@ -182,9 +182,9 @@ java -jar target/*.jar
 Exemplo:
 ```text
 docker compose up -d
-* docker compose ps
+docker compose ps
 curl http://localhost:8080/api/consumo
-
+```
 ---
 
 ## ⚙️ Variáveis de Ambiente (principais)
@@ -259,7 +259,7 @@ docker_push:
         docker build -t ghcr.io/mello2040/consumoenergetico:latest .
         echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
         docker push ghcr.io/mello2040/consumoenergetico:latest
-
+```
 ---
 
 ## 🐳 Containerização
