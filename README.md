@@ -287,16 +287,9 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 Coloque prints na pasta `docs/screenshots/`. Exemplos:
 
 ```markdown
-![Imagem do WhatsApp de 2025-10-14 à(s) 20 04 58_eef9bee9](https://github.com/user-attachments/assets/9d563a8f-01e8-4907-8404-65187c1fa923)
 
-![Imagem do WhatsApp de 2025-10-14 à(s) 20 06 29_f23f6152](https://github.com/user-attachments/assets/c7af26e6-72e2-44c4-b2ea-babb0221cb98)
 
-![Imagem do WhatsApp de 2025-10-14 à(s) 20 07 31_627b8132](https://github.com/user-attachments/assets/f7490556-dcc7-4bf5-93fd-fe47977a8907)
-![Imagem do WhatsApp de 2025-10-14 à(s) 20 08 17_d85fb0b9](https://github.com/user-attachments/assets/b72c5058-035a-4135-8de0-be4a6382b975)
-![Imagem do WhatsApp de 2025-10-14 à(s) 20 09 01_fc4a1201](https://github.com/user-attachments/assets/6d18f23a-7050-4630-81bd-ba9aeb471616)
-![Imagem do WhatsApp de 2025-10-14 à(s) 20 09 01_d8906ac5](https://github.com/user-attachments/assets/37f4c60a-97c7-4ffe-805c-841d25661930)
-![Imagem do WhatsApp de 2025-10-14 à(s) 20 09 01_57ccf608](https://github.com/user-attachments/assets/750fa513-ad37-49b6-819c-bebec26f6c36)
-![Imagem do WhatsApp de 2025-10-14 à(s) 20 09 28_6667f409](https://github.com/user-attachments/assets/ee7e30cb-cd95-431c-8ea1-d87afb927764)
+
 
 
 
