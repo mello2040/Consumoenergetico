@@ -289,7 +289,13 @@ Coloque prints na pasta `docs/screenshots/`. Exemplos:
 ```markdown
 
 
-
+![Image Alt]([image_url](https://raw.githubusercontent.com/mello2040/Consumoenergetico/refs/heads/master/print%20docker%201.jpg))
+![Image Alt]([image_url](https://raw.githubusercontent.com/mello2040/Consumoenergetico/refs/heads/master/print%20docker%202.jpg))
+![Image Alt]([image_url](https://raw.githubusercontent.com/mello2040/Consumoenergetico/refs/heads/master/cicd%20andamento.jpg))
+![Image Alt]([image_url](https://raw.githubusercontent.com/mello2040/Consumoenergetico/refs/heads/master/cicd1.jpg))
+![Image Alt]([image_url](https://raw.githubusercontent.com/mello2040/Consumoenergetico/refs/heads/master/cicd2.jpg))
+![Image Alt]([image_url](https://raw.githubusercontent.com/mello2040/Consumoenergetico/refs/heads/master/cicd3.jpg))
+![Image Alt]([image_url](https://raw.githubusercontent.com/mello2040/Consumoenergetico/refs/heads/master/td%20certo.jpg))
 
 
 
