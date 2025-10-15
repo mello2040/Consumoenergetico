@@ -299,21 +299,16 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 ---
 
-Prints / Evidências
-https://github.com/mello2040/Consumoenergetico/blob/master/print%20docker%201.jpg?raw=true
-![Docker build print](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%202.jpg)
+## Prints / Evidências
 
-![Docker test print]([https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%202.jpg](https://github.com/mello2040/Consumoenergetico/blob/master/print%20docker%201.jpg?raw=true))
+![docker ps](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%201.jpg)
+![docker build](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%202.jpg)
+![CI/CD – andamento](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/cicd%20andamento.jpg)
+![CI/CD – etapa 1](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/cicd1.jpg)
+![CI/CD – etapa 2](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/cicd2.jpg)
+![CI/CD – etapa 3](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/cicd3.jpg)
+![Tudo certo](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/td%20certo.jpg)
 
-![CI/CD 5]([https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%202.jpg](https://github.com/mello2040/Consumoenergetico/blob/master/cicd%20andamento.jpg?raw=true))
-
-![CI/CD 1]([https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%202.jpg](https://github.com/mello2040/Consumoenergetico/blob/master/cicd1.jpg?raw=true))
-
-![CI/CD 2]([https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%202.jpg](https://github.com/mello2040/Consumoenergetico/blob/master/cicd2.jpg?raw=true))
-
-![CI/CD 3]([https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%202.jpg](https://github.com/mello2040/Consumoenergetico/blob/master/cicd3.jpg?raw=true))
-
-![CI/CD 4]([https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%202.jpg](https://github.com/mello2040/Consumoenergetico/blob/master/td%20certo.jpg?raw=true))
 
 
 
