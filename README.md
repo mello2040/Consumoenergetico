@@ -279,42 +279,9 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 * ENTRYPOINT: inicia automaticamente o JAR da aplicação.
 ```
-```
----
-
-## 🖼 Prints / Evidências
-
-Coloque prints na pasta `docs/screenshots/`. Exemplos:
-
-```markdown
-
-![Docker build print](https://github.com/mello2040/Consumoenergetico/blob/master/print%20docker%202.jpg?raw=true)
-
-https://github.com/mello2040/Consumoenergetico/blob/master/print%20docker%202.jpg?raw=true
-
-![Image Alt](image_url)
-
-![Image Alt](image_url)
-
-![Image Alt](image_url)
-
-![Image Alt](image_url)
-
-![Image Alt](image_url)
 
 
 
-
-
-
-
-
-
-
-
-
-
----
 ```
 ## 🧰 Tecnologias Utilizadas
 
@@ -331,3 +298,10 @@ https://github.com/mello2040/Consumoenergetico/blob/master/print%20docker%202.jp
 * **Jakarta Validation**
 
 ---
+
+Prints / Evidências
+
+![Docker build print](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%202.jpg)
+
+
+
