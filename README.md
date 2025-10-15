@@ -302,11 +302,17 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ## Prints / Evidências
 
 ![docker ps](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%201.jpg)
+
 ![docker build](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/print%20docker%202.jpg)
+
 ![CI/CD – andamento](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/cicd%20andamento.jpg)
+
 ![CI/CD – etapa 1](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/cicd1.jpg)
+
 ![CI/CD – etapa 2](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/cicd2.jpg)
+
 ![CI/CD – etapa 3](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/cicd3.jpg)
+
 ![Tudo certo](https://raw.githubusercontent.com/mello2040/Consumoenergetico/master/td%20certo.jpg)
 
 
