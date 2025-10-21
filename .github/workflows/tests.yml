@@ -2,13 +2,19 @@ name: API BDD Tests
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master" ]   # mude para "main" se sua branch padrão for main
   pull_request:
     branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    # Faz todos os "run:" executarem dentro da subpasta do módulo
+    defaults:
+      run:
+        working-directory: consumoenergetico
 
     steps:
       - name: Checkout
@@ -24,28 +30,33 @@ jobs:
       - name: Build (compilar sem testes)
         run: mvn -q -DskipTests package
 
-      - name: Start API (profile test, background)
+      - name: Start API (profile test) em background
         run: |
-          nohup mvn spring-boot:run "-Dspring-boot.run.profiles=test" > app.log 2>&1 &
-          for i in {1..30}; do
-            curl -fsS http://localhost:8080/actuator/health || true
-            if curl -fsS http://localhost:8080/actuator/health | grep -q UP; then
+          nohup mvn spring-boot:run "-Dspring-boot.run.profiles=test" "-Dspring-boot.run.arguments=--server.port=8080" > app.log 2>&1 &
+          echo "Aguardando API subir..."
+          for i in {1..60}; do
+            if curl -fsS http://localhost:8080/api/consumo >/dev/null 2>&1; then
               echo "API UP"; break
             fi
             sleep 2
           done
-          echo "==== APP LOG (últimas linhas) ===="
-          tail -n 100 app.log
+          echo "==== Últimas linhas do app.log ===="
+          tail -n 150 app.log || true
 
       - name: Run BDD tests
         run: mvn -DbaseUrl=http://localhost:8080/api -Dtest=RunCucumberTest test
 
-      - name: Publicar relatório do Cucumber
+      - name: Upload Cucumber report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-report
           path: |
-            target/cucumber.json
-            target/cucumber-report.html
-            app.log
+            consumoenergetico/target/cucumber-report.html
+            consumoenergetico/target/cucumber.json
+            consumoenergetico/app.log
+
+      - name: Stop API
+        if: always()
+        run: |
+          pkill -f 'spring-boot:run' || true
