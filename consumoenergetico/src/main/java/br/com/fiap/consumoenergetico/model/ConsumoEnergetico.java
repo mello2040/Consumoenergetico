@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDate;
 
@@ -26,6 +27,7 @@ public class ConsumoEnergetico {
     private Long id;
 
     @Column(name = "QTD_CONSUMO")
+    @PositiveOrZero(message = "qtdConsumo não pode ser negativa")
     private double qtdConsumo;
 
     @Column(name = "DATA_CONSUMO")
